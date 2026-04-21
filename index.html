@@ -2,53 +2,9 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>U-Bahn Anzeige</title>
+<title>Alte Heide</title>
 
-<script>
-async function loadData() {
-try {
-const res = await fetch("https://v6.bvg.transport.rest/stops/de:09162:740/departures?duration=10");
-const data = await res.json();
-
-let html = "";
-let count = 0;
-
-data.forEach(d => {
-if (!d.line.name.startsWith("U")) return;
-if (count >= 5) return;
-
-let min = Math.round((new Date(d.when) - new Date()) / 60000);
-if (min < 0) return;
-
-let isNow = (min === 0);
-if (isNow) min = "JETZT";
-
-html += `
-<div class="row">
-<div class="top">
-<div class="line">${d.line.name}</div>
-<div class="time ${isNow ? "blink" : ""}">${min}</div>
-</div>
-<div class="dest">${d.direction}</div>
-</div>
-`;
-count++;
-});
-
-if (html === "") {
-html = "Keine Daten";
-}
-
-document.getElementById("app").innerHTML = html;
-
-} catch (e) {
-document.getElementById("app").innerHTML = "Keine Daten";
-}
-}
-
-setInterval(loadData, 30000);
-window.onload = loadData;
-</script>
+<meta http-equiv="refresh" content="60">
 
 <style>
 body {
@@ -58,7 +14,6 @@ color: white;
 font-family: Arial, sans-serif;
 }
 
-/* Header */
 .header {
 font-size: 42px;
 padding: 20px;
@@ -66,56 +21,19 @@ border-bottom: 2px solid #333;
 letter-spacing: 2px;
 }
 
-/* Eintrag */
-.row {
-padding: 28px;
-border-bottom: 1px solid #1f1f1f;
-}
-
-/* obere Zeile */
-.top {
-display: flex;
-justify-content: space-between;
-align-items: center;
-}
-
-/* Linie */
-.line {
-font-size: 100px;
-color: #0066cc;
-font-weight: bold;
-}
-
-/* Zeit */
-.time {
-font-size: 100px;
-}
-
-/* Ziel */
-.dest {
-font-size: 48px;
-margin-top: 8px;
-color: #bdbdbd;
-}
-
-/* Blinkeffekt */
-.blink {
-animation: blink 1s infinite;
-}
-
-@keyframes blink {
-0% { opacity: 1; }
-50% { opacity: 0.2; }
-100% { opacity: 1; }
+iframe {
+width: 100%;
+height: 100vh;
+border: none;
 }
 </style>
-
 </head>
 
 <body>
 
 <div class="header">ALTE HEIDE</div>
-<div id="app">Lade Daten…</div>
+
+<iframe src="https://www.mvg.de/meinhalt/alte-heide"></iframe>
 
 </body>
 </html>
